@@ -77,16 +77,30 @@ function drawChart(selection, data) {
         .style("stroke-width", "1px");
 
     node.append("text")
-        .attr("dy", ".31em")
         .attr("text-anchor", d => {
             return d.x < 180 ? "start" : "end";
         })
         .attr("transform", d => {
             return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)";
         })
-        .text(d => generatePercentage(d, total))
         .style("font-size", "11px")
-        .style("font-family", "Arial, Helvetica");
+        .style("font-family", "Arial, Helvetica")
+        .attr("dy", "1.5em")
+        .attr("dx", ".31em")
+        .text(d => d.data.name);
+        
+
+    node.append("text")
+        .attr("text-anchor", d => {
+            return d.x < 180 ? "start" : "end";
+        })
+        .attr("transform", d => {
+            return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)";
+        })
+        .style("font-size", "11px")
+        .style("font-family", "Arial, Helvetica")
+        .attr("dy", ".31em")
+        .text(d => generatePercentage(d, total));
 
 }
 
