@@ -6,12 +6,17 @@ function generateFillColor(d, total) {
     const incrementCeiling = 50;    // set the limit on the darkest colour we will accept
     const lightness = baseValue - (proportion * incrementCeiling);
 
+    if (isNaN(lightness)) throw new Error("broken");
+    if (!isFinite(lightness)) throw new Error("broken");
+
     const val = `hsl(240, 100%, ${lightness}%)`;
     console.log("returning val: %o", val);
+
+
     return val;
 }
 
-function generateNodeLabel(d, total) {
+function generatePercentage(d, total) {
     const percentage = Number((d.data.sentenceCount / total) * 100).toFixed(2);
     return `${percentage}%`;
 }
@@ -66,8 +71,7 @@ function drawChart(selection, data) {
         });
 
     node.append("circle")
-//        .attr("r", 4.5)
-        .attr("r", 10)
+        .attr("r", 4.5)
         .style("fill", d => generateFillColor(d, total))
         .style("stroke", "#999999")
         .style("stroke-width", "1px");
@@ -80,7 +84,7 @@ function drawChart(selection, data) {
         .attr("transform", d => {
             return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)";
         })
-        .text(d => generateNodeLabel(d, total))
+        .text(d => generatePercentage(d, total))
         .style("font-size", "11px")
         .style("font-family", "Arial, Helvetica");
 
@@ -92,7 +96,7 @@ function onReady() {
     const selection = d3.select('svg');
     console.log("selected %o", selection);
 
-    drawChart(selection, ALL_TRIALS);
+    drawChart(selection, TRIALS_WITH_CONFIDENCE);
 }
 
 document.addEventListener('DOMContentLoaded', onReady);
