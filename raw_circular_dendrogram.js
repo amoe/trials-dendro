@@ -101,8 +101,13 @@ function drawChart(selection, data) {
         .style("font-family", "Arial, Helvetica")
         .attr("dy", ".31em")
         .text(d => generatePercentage(d, total));
-
 }
+
+datasets = {
+    'confidence': TRIALS_WITH_CONFIDENCE,
+    'all': ALL_TRIALS
+};
+
 
 function onReady() {
     console.log("on ready");
@@ -110,7 +115,15 @@ function onReady() {
     const selection = d3.select('svg');
     console.log("selected %o", selection);
 
-    drawChart(selection, TRIALS_WITH_CONFIDENCE);
+    document.querySelectorAll("button").forEach(b => {
+        b.addEventListener('click', e => {
+            datasetName = e.target.getAttribute('name');
+            selection.selectAll('*').remove();
+            drawChart(selection, datasets[datasetName]);
+        });
+    });
+
+    drawChart(selection, ALL_TRIALS);
 }
 
 document.addEventListener('DOMContentLoaded', onReady);
